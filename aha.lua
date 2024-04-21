@@ -553,6 +553,9 @@ function IsBalloonPopped(Id)
 end
 
 function PopBalloon(BalloonId)
+	if not SlingShot.getWeaponState().isEquipped then
+		Lib.Network.Invoke("Slingshot_Toggle")
+	end	
 	while true do
 		spawn(function()
 			Lib.Network.Invoke("Slingshot_FireProjectile", Vector3.new(-9920.5322265625, 17.571279525756836, -363.1154479980469), -0.06155838741960295, 0.5865521407193401, 200)
