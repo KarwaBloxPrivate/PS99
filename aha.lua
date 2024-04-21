@@ -315,11 +315,6 @@ game:GetService("Players").LocalPlayer.Idled:connect(function()
 	game:GetService("VirtualUser"):Button2Up(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
 end)
 
-if tonumber(GetServerPing()) >= 1000 then
-	print(ScriptLog.."Ping too high server hopping")
-	ServerHop()
-end
-
 local StuckOnLoad = os.time()
 local Loading
 repeat 
@@ -333,6 +328,11 @@ repeat
 until MainGui.Enabled or Loading >= 60
 
 print(ScriptLog.."Loaded in "..FormatTime(Loading))
+
+if tonumber(GetServerPing()) >= 1000 then
+	print(ScriptLog.."Ping too high server hopping")
+	ServerHop()
+end
 
 if Settings.Optimization.FpsBoost then
 	function Noclip()
