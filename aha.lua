@@ -688,7 +688,7 @@ for I, V in pairs(GiftsInfo) do
 			task.wait(0.02)
 		until ((GetAmountOfItems("Mini Chest") or 0) >= StartMiniChests2 + ExpectedMiniChests) and ((GetAmountOfItems("Large Gift Bag") or 0) >= StartLargeGifts2 + ExpectedLargeGifts) and ((GetAmountOfItems("Gift Bag") or 0) >= StartGifts2 + ExpectedGifts) or os.time() - ItemStartTime >= 7
 		
-		if os.time() - ItemStartTime >= 1.7 then
+		if os.time() - ItemStartTime >= 7 then
 			print(ScriptLog.."It used seconds to wait")
 		else
 			print(ScriptLog.."Collected all loot")
