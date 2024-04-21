@@ -776,6 +776,9 @@ local ItemsCollectedValue = BeatufyGems(math.round((GetRapOfItems("Large Gift Ba
 local GiftBagValue = BeatufyGems(math.round(GetRapOfItems("Gift Bag") * (GetAmountOfItems("Gift Bag") or 0 )))
 local LargeGiftBagValue = BeatufyGems(math.round(GetRapOfItems("Large Gift Bag") * (GetAmountOfItems("Large Gift Bag") or 0)))
 local MiniChestValue = BeatufyGems(math.round(GetRapOfItems("Mini Chest") * (GetAmountOfItems("Mini Chest") or 0 )))
+local TotalRap = BeatufyGems(math.round((GetRapOfItems("Mini Chest") * (GetAmountOfItems("Mini Chest") or 0 )) + (GetRapOfItems("Large Gift Bag") * (GetAmountOfItems("Large Gift Bag") or 0 )) + (GetRapOfItems("Gift Bag") * (GetAmountOfItems("Gift Bag") or 0 ))))
+
+local Ping1 = tostring(math.round(tonumber(GetServerPing())))
 
 local Data = {
 	content = nil,
@@ -788,10 +791,10 @@ local Data = {
 			value = "[Balloons] **"..Balloons.."**\n[Gifts Broken] **"..BrokeGifts.."**\n[Items Collected] **"..ItemsCollected.."** ("..ItemsCollectedValue..")\n[Time] **"..EndTimeJoin.."**"
 		}, {
 			name = "🌍 Server",
-			value = "[Players] **"..PlayerString.."**\n[Ping] **"..GetServerPing().."ms**\n[JobId] **"..game.JobId.."**\n[PlaceId] **"..game.PlaceId.."**"
+			value = "[Players] **"..PlayerString.."**\n[Ping] **"..Ping1.."ms**\n[JobId] **"..game.JobId.."**\n[PlaceId] **"..game.PlaceId.."**"
 		}, {
 			name = "⚙ "..game:GetService("Players").LocalPlayer.Name,
-			value = "[Diamonds] **"..BeatufyGems(Lib.CurrencyCmds.Get("Diamonds") or 0).."** ("..comma_value(Lib.CurrencyCmds.Get("Diamonds") or 0)..")\n[Large Gift Bags] **"..comma_value(GetAmountOfItems("Large Gift Bag")).."** ("..LargeGiftBagValue..")\n[Gift Bags] **"..comma_value(GetAmountOfItems("Gift Bag")).."** ("..GiftBagValue..")\n[Mini Chest] **"..comma_value(GetAmountOfItems("Mini Chest")).."** ("..MiniChestValue..")"
+			value = "[Diamonds] **"..BeatufyGems(Lib.CurrencyCmds.Get("Diamonds") or 0).."** ("..comma_value(Lib.CurrencyCmds.Get("Diamonds") or 0)..")\n[Large Gift Bags] **"..comma_value(GetAmountOfItems("Large Gift Bag")).."** ("..LargeGiftBagValue..")\n[Gift Bags] **"..comma_value(GetAmountOfItems("Gift Bag")).."** ("..GiftBagValue..")\n[Mini Chest] **"..comma_value(GetAmountOfItems("Mini Chest")).."** ("..MiniChestValue..")".."\n[Total Rap] **"..TotalRap.."**"
 		} }
 	} },
 	username = game:GetService("Players").LocalPlayer.Name,
