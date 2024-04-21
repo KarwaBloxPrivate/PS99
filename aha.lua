@@ -14,7 +14,7 @@ local Settings = {
 	Optimization = {
 		FpsCap = 60,
 		Disable3dRendering = false,
-		DeleteGUIs = true
+		FpsBoost = false
 	},
 }
 
@@ -334,9 +334,80 @@ until MainGui.Enabled or Loading >= 60
 
 print(ScriptLog.."Loaded in "..FormatTime(Loading))
 
-if Settings.Optimization.DeleteGUIs then
+if Settings.Optimization.FpsBoost then
+	function Noclip()
+		for i, v in ipairs(game.Players.LocalPlayer.Character:GetDescendants()) do
+			if v:IsA("BasePart") and v.CanCollide == true then
+				v.CanCollide = false
+			end
+		end
+	end
+	game:GetService("RunService").Stepped:Connect(function()
+		if getgenv().noclip then
+			if game.Players.LocalPlayer.Character ~= nil then
+				Noclip()
+			end
+		end
+	end)
+	spawn(function() 
+		while task.wait() do
+			pcall(function()
+				if getgenv().noclip then 
+					if not game.Players.LocalPlayer.Character.HumanoidRootPart:FindFirstChild("Noclip") then 
+						local BV = Instance.new('BodyVelocity')
+						BV.Parent = game.Players.LocalPlayer.Character.HumanoidRootPart
+						BV.Velocity = Vector3.new(0, 0, 0)
+						BV.MaxForce = Vector3.new(9e9, 9e9, 9e9)
+						BV.Name = "Noclip"
+					end
+					if not game.Players.LocalPlayer.Character.HumanoidRootPart:FindFirstChild("Noclip1") then 
+						local BG = Instance.new('BodyGyro')
+						BG.P = 9e4
+						BG.Parent = game.Players.LocalPlayer.Character.HumanoidRootPart
+						BG.maxTorque = Vector3.new(9e9, 9e9, 9e9)
+						BG.cframe = workspace.CurrentCamera.CoordinateFrame
+						BG.Name = "Noclip1"
+					end
+					game.Players.LocalPlayer.Character.Humanoid.PlatformStand = true
+				else
+					if game.Players.LocalPlayer.Character.HumanoidRootPart:FindFirstChild("Noclip") then 
+						game.Players.LocalPlayer.Character.HumanoidRootPart:FindFirstChild("Noclip"):Destroy()
+					end
+					game.Players.LocalPlayer.Character.Humanoid.PlatformStand = false
+					if game.Players.LocalPlayer.Character.HumanoidRootPart:FindFirstChild("Noclip1") then 
+						game.Players.LocalPlayer.Character.HumanoidRootPart:FindFirstChild("Noclip1"):Destroy()
+					end
+				end
+			end)
+		end
+	end)
+
+	getgenv().noclip = true
+
 	local x, y = pcall(function() 
+		for i, v in pairs(game.Workspace:GetChildren()) do
+			if v.Name ~= game:GetService("Players").LocalPlayer.Name and v.Name ~= "Breakables" and v.Name ~= "__THINGS" and v.Name ~= "__DEBRIS" and v.Name ~= "Terrain" and v.Name ~= "Camera" and not string.find(v.Name, "Border") and v.Name ~= "Map2" then
+				v:Destroy()
+			end
+		end
+		for i, v in pairs(game.Workspace:WaitForChild("__THINGS"):GetChildren()) do
+			if v.Name ~= "BalloonGifts" and v.Name ~= "Lootbags" and v.Name ~= "Breakables" and v.Name ~= "Pets" then
+				v:Destroy()
+			end
+		end
+		for i, v in pairs(game:GetService("Players"):GetChildren()) do
+			if v.Name ~= game:GetService("Players").LocalPlayer.Name then
+				for I, V in pairs(v:GetChildren()) do
+					V:Destroy()
+				end
+			end
+		end
 		for i, v in pairs(game:GetService("Players").LocalPlayer.PlayerGui:GetChildren()) do
+			if v.Name ~= "Notifications" then
+				v:Destroy()
+			end
+		end
+		for i, v in pairs(game:GetService("StarterGui"):GetChildren()) do
 			if v.Name ~= "Notifications" then
 				v:Destroy()
 			end
@@ -355,8 +426,6 @@ if Settings.Optimization.Disable3dRendering then
 	game:GetService("RunService"):Set3dRenderingEnabled(false)
 end
 
-setfpscap(Settings.Optimization.FpsCap)
-
 function Teleport(CFramee) 
 	game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = CFramee
 end
@@ -370,13 +439,13 @@ SlingShot = getsenv(game:GetService("Players").LocalPlayer.PlayerScripts.Scripts
 getgenv().Teleport = true
 
 function FindCoinsByPos(pos, id)
-	for i, v in pairs(workspace.__THINGS.Breakables:GetChildren()) do
-		local Breakable = a.getBreakable(v.Name)
+	for i, v in pairs(getupvalues(a.getBreakable)[1]) do
+		local Breakable = v
 		if Breakable then
 			if Breakable.id == id then
 				local magnitude = (pos - Breakable.position).Magnitude
 				if magnitude < 1 then
-					return v.Name
+					return i
 				end
 			end 
 		end
@@ -385,8 +454,8 @@ function FindCoinsByPos(pos, id)
 end
 
 function CheckIfCoinExists(name) 
-	for i, v in pairs(workspace.__THINGS.Breakables:GetChildren()) do
-		if v.Name == name then
+	for i, v in pairs(getupvalues(a.getBreakable)[1]) do
+		if i == name then
 			return true
 		end
 	end
