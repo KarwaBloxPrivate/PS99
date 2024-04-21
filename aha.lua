@@ -14,7 +14,7 @@ local Settings = {
 	Optimization = {
 		FpsCap = 60,
 		Disable3dRendering = false,
-		FpsBoost = false
+		FpsBoost = true
 	},
 }
 
