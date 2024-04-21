@@ -13,7 +13,7 @@ local Settings = {
 	AmmountOfHopsToUpdateServers = 25,
 	Optimization = {
 		FpsCap = 60,
-		Disable3dRendering = false,
+		Disable3dRendering = true,
 		FpsBoost = true
 	},
 }
@@ -590,6 +590,10 @@ for i, v in pairs(Lib.Network.Invoke("BalloonGifts_GetActiveBalloons")) do
 			end
 		end
 	end
+end
+
+if Balloons < 10 then
+	ServerHop()
 end
 
 spawn(function()
