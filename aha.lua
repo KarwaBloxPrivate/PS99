@@ -674,7 +674,7 @@ for I, V in pairs(GiftsInfo) do
 		local ItemStartTime = os.time()
 		StartingArea = GetAreaNumber(V.Area)
 		repeat
-			task.wait()
+			task.wait(0.1)
 		until ((GetAmountOfItems("Mini Chest") or 0) >= StartMiniChests2 + ExpectedMiniChests) and ((GetAmountOfItems("Large Gift Bag") or 0) >= StartLargeGifts2 + ExpectedLargeGifts) and ((GetAmountOfItems("Gift Bag") or 0) >= StartGifts2 + ExpectedGifts) or os.time() - ItemStartTime >= 7
 		
 		if os.time() - ItemStartTime >= 1.7 then
@@ -713,10 +713,10 @@ for I, V in pairs(GiftsInfo) do
 		local Coin = FindCoinsByPos(v.LandPos, name)
 		local Item = v.BalloonType == "Small Balloon" and "Gift Bag" or v.BalloonType == "Medium Balloon" and "Large Gift Bag" or v.BalloonType == "Huge Balloon" and "Mini Chest" or "CouldntTell"
 		local StartTime = os.time()
-		repeat task.wait() Coin = FindCoinsByPos(v.LandPos, name) until Coin or os.time() - StartTime >= 4.4
+		repeat task.wait(0.1) Coin = FindCoinsByPos(v.LandPos, name) until Coin or os.time() - StartTime >= 4.4
 		if Coin then
 			local StartTimeBreak = os.time()
-			while task.wait() do
+			while task.wait(0.1) do
 				Lib.Network.Fire("Breakables_PlayerDealDamage", Coin)
 				Coin = FindCoinsByPos(v.LandPos, name)
 				if not Coin then
@@ -751,7 +751,7 @@ for I, V in pairs(GiftsInfo) do
 	if (GetAreaNumber(V.Area) == LastArea) then
 		local ItemStartTime = os.time()
 		repeat
-			task.wait()
+			task.wait(0.1)
 		until ((GetAmountOfItems("Mini Chest") or 0) >= StartMiniChests2 + ExpectedMiniChests) and ((GetAmountOfItems("Large Gift Bag") or 0) >= StartLargeGifts2 + ExpectedLargeGifts) and ((GetAmountOfItems("Gift Bag") or 0) >= StartGifts2 + ExpectedGifts) or os.time() - ItemStartTime >= 7
 	end
 end
