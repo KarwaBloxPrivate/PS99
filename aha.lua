@@ -553,7 +553,7 @@ function IsBalloonPopped(Id)
 end
 
 function PopBalloon(BalloonId)
-	if not SlingShot.getWeaponState().isEquipped then
+	if not (getupvalues(SlingShot.getWeaponState)[1] or false) then
 		Lib.Network.Invoke("Slingshot_Toggle")
 	end	
 	while true do
