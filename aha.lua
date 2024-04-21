@@ -14,7 +14,7 @@ local Settings = {
 	Optimization = {
 		FpsCap = 60,
 		Disable3dRendering = false,
-		FpsBoost = true
+		FpsBoost = false
 	},
 }
 
@@ -770,7 +770,7 @@ local Data = {
 		color = 5814783,
 		fields = { {
 			name = "📈 Info",
-			value = "[Balloons] **"..Balloons.."**".."**[Balloons Popped] "..PoppedBalloons.."**\n[Gifts Broken] **"..BrokeGifts.."**\n[Items Collected] **"..ItemsCollected.."** ("..ItemsCollectedValue..")\n[Time] **"..EndTimeJoin.."**"
+			value = "[Balloons] **"..Balloons.."**\n[Gifts Broken] **"..BrokeGifts.."**\n[Items Collected] **"..ItemsCollected.."** ("..ItemsCollectedValue..")\n[Time] **"..EndTimeJoin.."**"
 		}, {
 			name = "🌍 Server",
 			value = "[Players] **"..PlayerString.."**\n[Ping] **"..GetServerPing().."ms**\n[JobId] **"..game.JobId.."**\n[PlaceId] **"..game.PlaceId.."**"
