@@ -13,8 +13,8 @@ local Settings = {
 	AmmountOfHopsToUpdateServers = 25,
 	Optimization = {
 		FpsCap = 60,
-		Disable3dRendering = false,
-		FpsBoost = false
+		Disable3dRendering = true,
+		FpsBoost = true
 	},
 }
 
