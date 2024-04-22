@@ -14,7 +14,8 @@ local Settings = {
 	Optimization = {
 		FpsCap = 60,
 		Disable3dRendering = true,
-		FpsBoost = true
+		FpsBoost = true,
+		CheckForCoinsDelay = 0.2
 	},
 }
 
@@ -407,11 +408,6 @@ if Settings.Optimization.FpsBoost then
 				v:Destroy()
 			end
 		end
-		for i, v in pairs(game:GetService("StarterGui"):GetChildren()) do
-			if v.Name ~= "Notifications" then
-				v:Destroy()
-			end
-		end
 	end)
 end
 
@@ -724,10 +720,10 @@ for I, V in pairs(GiftsInfo) do
 		local Coin = FindCoinsByPos(v.LandPos, name)
 		local Item = v.BalloonType == "Small Balloon" and "Gift Bag" or v.BalloonType == "Medium Balloon" and "Large Gift Bag" or v.BalloonType == "Huge Balloon" and "Mini Chest" or "CouldntTell"
 		local StartTime = os.time()
-		repeat task.wait(0.02) Coin = FindCoinsByPos(v.LandPos, name) until Coin or os.time() - StartTime >= 4.4
+		repeat task.wait(Settings.Optimization.CheckForCoinsDelay) Coin = FindCoinsByPos(v.LandPos, name) until Coin or os.time() - StartTime >= 4.4
 		if Coin then
 			local StartTimeBreak = os.time()
-			while task.wait(0.02) do
+			while task.wait(Settings.Optimization.CheckForCoinsDelay) do
 				Lib.Network.Fire("Breakables_PlayerDealDamage", Coin)
 				Coin = FindCoinsByPos(v.LandPos, name)
 				if not Coin then
