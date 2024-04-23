@@ -14,7 +14,7 @@ local Settings = {
 	Optimization = {
 		FpsCap = 60,
 		Disable3dRendering = true,
-		FpsBoost = true,
+		FpsBoost = false,
 		CheckForCoinsDelay = 0.1
 	},
 }
@@ -402,11 +402,6 @@ if Settings.Optimization.FpsBoost then
 				for I, V in pairs(v:GetChildren()) do
 					V:Destroy()
 				end
-			end
-		end
-		for i, v in pairs(game:GetService("Players").LocalPlayer.PlayerGui:GetChildren()) do
-			if v.Name ~= "Notifications" then
-				v:Destroy()
 			end
 		end
 	end)
