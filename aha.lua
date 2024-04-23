@@ -14,8 +14,8 @@ local Settings = {
 	Optimization = {
 		FpsCap = 60,
 		Disable3dRendering = true,
-		FpsBoost = true,
-		CheckForCoinsDelay = 0.1
+		FpsBoost = false,
+		CheckForCoinsDelay = 0.2
 	},
 }
 
