@@ -1,5 +1,5 @@
 local Settings = {
-	Run = true,
+	Run = false,
 	IgnoreSmallBalloons = false,
 	Webhook = {
 		Tgl = true,
@@ -14,7 +14,7 @@ local Settings = {
 	Optimization = {
 		FpsCap = 60,
 		Disable3dRendering = true,
-		FpsBoost = false,
+		FpsBoost = true,
 		CheckForCoinsDelay = 0.2
 	},
 }
@@ -342,6 +342,7 @@ if Settings.Optimization.FpsBoost then
 				v.CanCollide = false
 			end
 		end
+		task.wait(0.2)
 	end
 	game:GetService("RunService").Stepped:Connect(function()
 		if getgenv().noclip then
@@ -401,11 +402,6 @@ if Settings.Optimization.FpsBoost then
 				for I, V in pairs(v:GetChildren()) do
 					V:Destroy()
 				end
-			end
-		end
-		for i, v in pairs(game:GetService("Players").LocalPlayer.PlayerGui:GetChildren()) do
-			if v.Name ~= "Notifications" then
-				v:Destroy()
 			end
 		end
 	end)
