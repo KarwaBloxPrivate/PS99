@@ -1,5 +1,5 @@
 local Settings = {
-	Run = false,
+	Run = true,
 	IgnoreSmallBalloons = false,
 	Webhook = {
 		Tgl = true,
