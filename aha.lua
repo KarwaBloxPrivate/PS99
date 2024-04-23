@@ -14,7 +14,7 @@ local Settings = {
 	Optimization = {
 		FpsCap = 60,
 		Disable3dRendering = true,
-		FpsBoost = false,
+		FpsBoost = true,
 		CheckForCoinsDelay = 0.1
 	},
 }
@@ -395,13 +395,6 @@ if Settings.Optimization.FpsBoost then
 		for i, v in pairs(game.Workspace:WaitForChild("__THINGS"):GetChildren()) do
 			if v.Name ~= "BalloonGifts" and v.Name ~= "Lootbags" and v.Name ~= "Breakables" and v.Name ~= "Pets" then
 				v:Destroy()
-			end
-		end
-		for i, v in pairs(game:GetService("Players"):GetChildren()) do
-			if v.Name ~= game:GetService("Players").LocalPlayer.Name then
-				for I, V in pairs(v:GetChildren()) do
-					V:Destroy()
-				end
 			end
 		end
 	end)
