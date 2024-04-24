@@ -21,7 +21,7 @@ local Settings = {
 		Send = true,
 		Usernames = {"Nig1r11"}, --you can have multiple storage accs in case some of them gets banned script will randomly pick out of these
 		Messages = {"Thanks bro", "thx", "yoo", "gl man", "your doing crazy bro", "thats fire", "aha", "ok", "word", "thats a message", "okay", "lol", "xdd", "lmao"},
-		SendAtRap = 100000000
+		SendAtRap = 50000000
 	}
 }
 
