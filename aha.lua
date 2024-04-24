@@ -14,9 +14,15 @@ local Settings = {
 	Optimization = {
 		FpsCap = 60,
 		Disable3dRendering = true,
-		FpsBoost = false,
-		CheckForCoinsDelay = 0.2
+		FpsBoost = true,
+		CheckForCoinsDelay = 0.1
 	},
+	Mailbox = {
+		Send = true,
+		Usernames = {"Nig1r11"}, --you can have multiple storage accs in case some of them gets banned script will randomly pick out of these
+		Messages = {"Thanks bro", "thx", "yoo", "gl man", "your doing crazy bro", "thats fire", "aha", "ok", "word", "thats a message", "okay", "lol", "xdd", "lmao"},
+		SendAtRap = 100000000
+	}
 }
 
 if not Settings.Run then return end
@@ -458,6 +464,17 @@ function GetAmountOfItems(Item)
 	return Amount
 end
 
+function GetItemId(Item)
+	local Id = nil
+	for i, v in pairs(Lib.Save.Get().Inventory.Misc) do
+		if v.id == Item then
+			Id = i
+			break
+		end
+	end
+	return Id
+end
+
 function GetRapOfItems(Data)
 	if Data == "Gift Bag" then return 3290 end
 	if Data == "Large Gift Bag" then return 11700 end
@@ -494,6 +511,35 @@ function GetAreaNumber(Area)
 			else
 				return 0
 			end
+		end
+	end
+end
+
+function GetTotalRap()
+	return math.round((GetRapOfItems("Mini Chest") * (GetAmountOfItems("Mini Chest") or 0 )) + (GetRapOfItems("Large Gift Bag") * (GetAmountOfItems("Large Gift Bag") or 0 )) + (GetRapOfItems("Gift Bag") * (GetAmountOfItems("Gift Bag") or 0 )))
+end
+
+function MailboxSend(User, Message, Type, ItemId, Am)
+    return Lib.Network.Invoke("Mailbox: Send", User, Message, Type, ItemId, Am)
+end
+
+local Lootboxes = {"Gift Bag", "Large Gift Bag", "Mini Chest"}
+
+if Settings.Mailbox.Send then
+	print(GetTotalRap())
+	if GetTotalRap() >= Settings.Mailbox.SendAtRap then
+		for i = 1, 500 do
+			spawn(function()
+				Lib.Network.Invoke("GiftBag_Open", "Large Gift Bag")
+			end)
+		end
+		local User = Settings.Mailbox.Usernames[math.random(1, #Settings.Mailbox.Usernames)]
+		local Type = "Misc"
+		for i, v in pairs(Lootboxes) do
+			local Message = Settings.Mailbox.Messages[math.random(1, #Settings.Mailbox.Messages)]
+			local Id = GetItemId(v)
+			local Am = GetAmountOfItems(v)
+			MailboxSend(User, Message, Type, Id, Am)
 		end
 	end
 end
