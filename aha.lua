@@ -21,7 +21,7 @@ local Settings = {
 		Send = true,
 		Usernames = {"Nig1r11"}, --you can have multiple storage accs in case some of them gets banned script will randomly pick out of these
 		Messages = {"Thanks bro", "thx", "yoo", "gl man", "your doing crazy bro", "thats fire", "aha", "ok", "word", "thats a message", "okay", "lol", "xdd", "lmao"},
-		SendAtRap = 100000000
+		SendAtRap = 50000000
 	}
 }
 
@@ -235,7 +235,7 @@ function ServerHop()
 			end
 		end
 	end)
-	if not succes or Count >= 10 then
+	if not succes or Count >= 10 or #Servers < 10 then
 		task.wait(5)
 		print(ScriptLog.."Server hop failed trying shit method")
 		TeleportService:Teleport(game.PlaceId, game.Players.LocalPlayer)
@@ -528,17 +528,21 @@ local Lootboxes = {"Gift Bag", "Large Gift Bag", "Mini Chest"}
 if Settings.Mailbox.Send then
 	print(GetTotalRap())
 	if GetTotalRap() >= Settings.Mailbox.SendAtRap then
-		for i = 1, 500 do
+		local StartGifts = GetAmountOfItems("Large Gift Bag")
+		local AmOfGifts = math.clamp(GetAmountOfItems("Large Gift Bag"), 1, 500)
+		for i = 1, math.clamp(GetAmountOfItems("Large Gift Bag"), 1, 500) do
 			spawn(function()
-				Lib.Network.Invoke("GiftBag_Open", "Large Gift Bag")
+				local x = nil
+				repeat x = Lib.Network.Invoke("GiftBag_Open", "Large Gift Bag") until x
 			end)
 		end
+		repeat task.wait() until GetAmountOfItems("Large Gift Bag") == StartGifts - AmOfGifts
 		local User = Settings.Mailbox.Usernames[math.random(1, #Settings.Mailbox.Usernames)]
 		local Type = "Misc"
 		for i, v in pairs(Lootboxes) do
 			local Message = Settings.Mailbox.Messages[math.random(1, #Settings.Mailbox.Messages)]
 			local Id = GetItemId(v)
-			local Am = GetAmountOfItems(v)
+			local Am = GetAmountOfItems(v) - 1
 			MailboxSend(User, Message, Type, Id, Am)
 		end
 	end
