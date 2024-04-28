@@ -21,7 +21,7 @@ local Settings = {
 		Send = true,
 		Usernames = {"Nig1r11"}, --you can have multiple storage accs in case some of them gets banned script will randomly pick out of these
 		Messages = {"Thanks bro", "thx", "yoo", "gl man", "your doing crazy bro", "thats fire", "aha", "ok", "word", "thats a message", "okay", "lol", "xdd", "lmao"},
-		SendAtRap = 50000000
+		SendAtRap = 100000000
 	}
 }
 
@@ -241,6 +241,24 @@ function ServerHop()
 		TeleportService:Teleport(game.PlaceId, game.Players.LocalPlayer)
 	end
 end
+
+spawn(function() 
+	for i, v in pairs(game:GetService("Players"):GetChildren()) do
+		if v:IsInGroup(5060810) then
+			print(ScriptLog.."Staff detected server hopping")
+			ServerHop()
+			break
+		else
+			print(ScriptLog..v.Name.." is not a staff member")
+		end
+	end
+	game:GetService("Players").PlayerAdded:Connect(function(player) 
+		if player:IsInGroup(5060810) then
+			print(ScriptLog.."Staff detected server hopping")
+			ServerHop()
+		end
+	end)
+end)
 
 function FormatTime(seconds)
 	local hours = math.floor(seconds / 3600)
