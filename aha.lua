@@ -429,7 +429,12 @@ local Lib_ = require(game.ReplicatedStorage:WaitForChild("Library"))
 local a = getsenv(game:GetService("Players").LocalPlayer.PlayerScripts.Scripts.Game.Breakables["Breakables Frontend"])
 local HttpService = game:GetService("HttpService")
 
-game:GetService("Players").LocalPlayer.PlayerScripts.Scripts.Core["Idle Tracking"].Disabled = true
+old = hookfunction(Lib.Network.Invoke, function(Remote, ...)
+	if Remote == "Is Real Player" then
+		return true
+	end
+	return old(Remote, ...)
+end)
 
 if Settings.Optimization.Disable3dRendering then
 	game:GetService("RunService"):Set3dRenderingEnabled(false)
@@ -538,7 +543,7 @@ function GetTotalRap()
 end
 
 function MailboxSend(User, Message, Type, ItemId, Am)
-    return Lib.Network.Invoke("Mailbox: Send", User, Message, Type, ItemId, Am)
+	return Lib.Network.Invoke("Mailbox: Send", User, Message, Type, ItemId, Am)
 end
 
 local Lootboxes = {"Gift Bag", "Large Gift Bag", "Mini Chest"}
@@ -681,6 +686,24 @@ spawn(function()
 	end
 end)
 
+spawn(function()
+	while task.wait() do
+		local Tbl = {}
+		if #workspace.__THINGS.Orbs:GetChildren() > 0 then
+			for i, v in pairs(workspace.__THINGS.Orbs:GetChildren()) do
+				table.insert(Tbl, tonumber(v.Name))
+			end
+			Lib.Network.Fire("Orbs: Collect", Tbl)
+			for i, v in pairs(workspace.__THINGS.Orbs:GetChildren()) do
+				if not table.find(Tbl, tonumber(v.Name)) then
+					Lib.Network.Fire("Orbs: Collect", {tonumber(v.Name)})
+				end
+				v:Destroy()
+			end
+		end
+	end
+end)
+
 local PlayerString = ""
 
 local TblSize = #game.Players:GetChildren()
@@ -702,13 +725,8 @@ end)
 local StartingArea = nil
 local PoppedYet = false
 local LastArea = 0
-local StartMiniChests2 = GetAmountOfItems("Mini Chest") or 0
-local StartLargeGifts2 = GetAmountOfItems("Large Gift Bag") or 0
-local StartGifts2 = GetAmountOfItems("Gift Bag") or 0
 
-local ExpectedMiniChests = 0
-local ExpectedLargeGifts = 0
-local ExpectedGifts = 0
+local ExpectedAmountOfItems = 0
 
 for i, v in pairs(GiftsInfo) do
 	local AreaNumber = GetAreaNumber(v.Area)
@@ -718,6 +736,22 @@ for i, v in pairs(GiftsInfo) do
 end
 
 local PoppedBalloons = 0
+
+function GetAmountOfAllItems()
+	local Count = 0 
+	for i, v in pairs(Lib.Save.Get().Inventory) do
+		for I, V in pairs(v) do
+			if V._am then
+				if V._am < 100000000 then
+					Count = Count + V._am
+				end
+			end
+		end
+	end
+	return Count
+end
+
+local StartAmountOfItems = GetAmountOfAllItems() or 0
 
 for I, V in pairs(GiftsInfo) do
 	if not StartingArea then
@@ -742,39 +776,35 @@ for I, V in pairs(GiftsInfo) do
 		StartingArea = GetAreaNumber(V.Area)
 		repeat
 			task.wait(0.02)
-		until ((GetAmountOfItems("Mini Chest") or 0) >= StartMiniChests2 + ExpectedMiniChests) and ((GetAmountOfItems("Large Gift Bag") or 0) >= StartLargeGifts2 + ExpectedLargeGifts) and ((GetAmountOfItems("Gift Bag") or 0) >= StartGifts2 + ExpectedGifts) or os.time() - ItemStartTime >= 7
-		
+		until (GetAmountOfAllItems() or 0) >= StartAmountOfItems + ExpectedAmountOfItems or os.time() - ItemStartTime >= 7
+
 		if os.time() - ItemStartTime >= 7 then
 			print(ScriptLog.."It used seconds to wait")
 		else
 			print(ScriptLog.."Collected all loot")
 		end
-		
-		StartMiniChests2 = GetAmountOfItems("Mini Chest") or 0
-		StartLargeGifts2 = GetAmountOfItems("Large Gift Bag") or 0
-		StartGifts2 = GetAmountOfItems("Gift Bag") or 0
-		
-		ExpectedMiniChests = 0
-		ExpectedLargeGifts = 0
-		ExpectedGifts = 0
+
+		StartAmountOfItems = GetAmountOfAllItems() or 0
+
+		ExpectedAmountOfItems = 0
 	end
 	print(ScriptLog.."Breaking presents in "..V.Area.." ("..(GetAreaNumber(V.Area) or 0)..")")
 	TeleportToArea(V.Area)
-	
+
 	for i, v in pairs(V.tbl) do
 		print(v.LandPos, v.BalloonType)
 		local Item = v.BalloonType == "Small Balloon" and "Gift Bag" or v.BalloonType == "Medium Balloon" and "Large Gift Bag" or v.BalloonType == "Huge Balloon" and "Mini Chest" or "CouldntTell"
 		if Item == "Gift Bag" then
-			ExpectedGifts = ExpectedGifts + 1
+			StartAmountOfItems = StartAmountOfItems + 1
 		end
 		if Item == "Large Gift Bag" then
-			ExpectedLargeGifts = ExpectedLargeGifts + 1
+			StartAmountOfItems = StartAmountOfItems + 1
 		end
 		if Item == "Mini Chest" then
-			ExpectedMiniChests = ExpectedMiniChests + 1
+			StartAmountOfItems = StartAmountOfItems + 1
 		end
 	end
-	
+
 	for i, v in pairs(V.tbl) do
 		local name = v.BalloonType.." Gift"
 		local Coin = FindCoinsByPos(v.LandPos, name)
@@ -795,23 +825,23 @@ for I, V in pairs(GiftsInfo) do
 						ExpectedGifts = ExpectedGifts - 1
 					end
 					if Item == "Large Gift Bag" then
-						ExpectedLargeGifts = ExpectedLargeGifts - 1
+						StartAmountOfItems = StartAmountOfItems - 1
 					end
 					if Item == "Mini Chest" then
-						ExpectedMiniChests = ExpectedMiniChests - 1
+						StartAmountOfItems = StartAmountOfItems - 1
 					end
 					break
 				end
 			end
 		else
 			if Item == "Gift Bag" then
-				ExpectedGifts = ExpectedGifts - 1
+				StartAmountOfItems = StartAmountOfItems - 1
 			end
 			if Item == "Large Gift Bag" then
-				ExpectedLargeGifts = ExpectedLargeGifts - 1
+				StartAmountOfItems = StartAmountOfItems - 1
 			end
 			if Item == "Mini Chest" then
-				ExpectedMiniChests = ExpectedMiniChests - 1
+				StartAmountOfItems = StartAmountOfItems - 1
 			end
 		end
 	end
@@ -819,7 +849,7 @@ for I, V in pairs(GiftsInfo) do
 		local ItemStartTime = os.time()
 		repeat
 			task.wait(0.02)
-		until ((GetAmountOfItems("Mini Chest") or 0) >= StartMiniChests2 + ExpectedMiniChests) and ((GetAmountOfItems("Large Gift Bag") or 0) >= StartLargeGifts2 + ExpectedLargeGifts) and ((GetAmountOfItems("Gift Bag") or 0) >= StartGifts2 + ExpectedGifts) or os.time() - ItemStartTime >= 7
+		until (GetAmountOfAllItems() or 0) >= StartAmountOfItems + ExpectedAmountOfItems or os.time() - ItemStartTime >= 7
 	end
 end
 
