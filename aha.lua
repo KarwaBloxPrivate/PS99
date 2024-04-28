@@ -795,13 +795,13 @@ for I, V in pairs(GiftsInfo) do
 		print(v.LandPos, v.BalloonType)
 		local Item = v.BalloonType == "Small Balloon" and "Gift Bag" or v.BalloonType == "Medium Balloon" and "Large Gift Bag" or v.BalloonType == "Huge Balloon" and "Mini Chest" or "CouldntTell"
 		if Item == "Gift Bag" then
-			StartAmountOfItems = StartAmountOfItems + 1
+			ExpectedAmountOfItems = ExpectedAmountOfItems + 1
 		end
 		if Item == "Large Gift Bag" then
-			StartAmountOfItems = StartAmountOfItems + 1
+			ExpectedAmountOfItems = ExpectedAmountOfItems + 1
 		end
 		if Item == "Mini Chest" then
-			StartAmountOfItems = StartAmountOfItems + 1
+			ExpectedAmountOfItems = ExpectedAmountOfItems + 1
 		end
 	end
 
@@ -822,26 +822,26 @@ for I, V in pairs(GiftsInfo) do
 				end
 				if os.time() - StartTimeBreak >= 6.8 then
 					if Item == "Gift Bag" then
-						ExpectedGifts = ExpectedGifts - 1
+						ExpectedAmountOfItems = ExpectedAmountOfItems - 1
 					end
 					if Item == "Large Gift Bag" then
-						StartAmountOfItems = StartAmountOfItems - 1
+						ExpectedAmountOfItems = ExpectedAmountOfItems - 1
 					end
 					if Item == "Mini Chest" then
-						StartAmountOfItems = StartAmountOfItems - 1
+						ExpectedAmountOfItems = ExpectedAmountOfItems - 1
 					end
 					break
 				end
 			end
 		else
 			if Item == "Gift Bag" then
-				StartAmountOfItems = StartAmountOfItems - 1
+				ExpectedAmountOfItems = ExpectedAmountOfItems - 1
 			end
 			if Item == "Large Gift Bag" then
-				StartAmountOfItems = StartAmountOfItems - 1
+				ExpectedAmountOfItems = ExpectedAmountOfItems - 1
 			end
 			if Item == "Mini Chest" then
-				StartAmountOfItems = StartAmountOfItems - 1
+				ExpectedAmountOfItems = ExpectedAmountOfItems - 1
 			end
 		end
 	end
