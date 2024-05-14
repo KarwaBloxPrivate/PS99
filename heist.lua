@@ -40,7 +40,7 @@ local HttpService = game:GetService("HttpService")
 getgenv().GettingServers = false
 
 if isfile(FolderPath.."NiggaScriptHopsAmmount.json") and HttpService:JSONDecode(readfile(FolderPath.."NiggaScriptHopsAmmount.json")) > Settings.AmmountOfHopsToUpdateServers or not isfile(FolderPath.."NiggaScriptHopsAmmount.json") then
-	rconsoleprint(ScriptLog.."Getting servers from Roblox API (Page "..maxPages..")")
+	print(ScriptLog.."Getting servers from Roblox API (Page "..maxPages..")")
 	local RestartedSV = pcall(function()
 		if isfile(FolderPath.."NiggaScriptAntiSameServer.json") then
 			writefile(FolderPath.."NiggaScriptAntiSameServer.json", HttpService:JSONEncode({}))
@@ -57,10 +57,10 @@ if isfile(FolderPath.."NiggaScriptHopsAmmount.json") and HttpService:JSONDecode(
 		end)
 
 		getgenv().GettingServers = true
-		rconsoleprint(ScriptLog.."Getting "..currentPage.." Page")
+		print(ScriptLog.."Getting "..currentPage.." Page")
 
 		if not success then
-			rconsoleprint(ScriptLog.."Failed to get page "..currentPage)
+			print(ScriptLog.."Failed to get page "..currentPage)
 			break
 		end
 
@@ -87,9 +87,9 @@ elseif isfile(FolderPath.."NiggaScriptServers.json") then
 		end)
 
 		if success then
-			rconsoleprint(ScriptLog.."Got servers from file saved in Workspace")
+			print(ScriptLog.."Got servers from file saved in Workspace")
 		else
-			rconsoleprint(ScriptLog.."Failed to get servers from file, retrying")
+			print(ScriptLog.."Failed to get servers from file, retrying")
 			task.wait(1)
 		end
 	end
@@ -97,7 +97,7 @@ else
 	if isfile(FolderPath.."NiggaScriptServers.json") then delfile(FolderPath.."NiggaScriptServers.json") end
 	if isfile(FolderPath.."NiggaScriptHopsAmmount.json") then delfile(FolderPath.."NiggaScriptHopsAmmount.json") end
 	if isfile(FolderPath.."NiggaScriptAntiSameServer.json") then delfile(FolderPath.."NiggaScriptAntiSameServer.json") end
-	rconsoleprint(ScriptLog.."Getting servers from Roblox API (Page "..maxPages..")")
+	print(ScriptLog.."Getting servers from Roblox API (Page "..maxPages..")")
 	local RestartedSV = pcall(function()
 		if isfile(FolderPath.."NiggaScriptAntiSameServer.json") then
 			writefile(FolderPath.."NiggaScriptAntiSameServer.json", HttpService:JSONEncode({}))
@@ -114,10 +114,10 @@ else
 		end)
 
 		getgenv().GettingServers = true
-		rconsoleprint(ScriptLog.."Getting "..currentPage.." Page")
+		print(ScriptLog.."Getting "..currentPage.." Page")
 
 		if not success then
-			rconsoleprint(ScriptLog.."Failed to get page "..currentPage)
+			print(ScriptLog.."Failed to get page "..currentPage)
 			break
 		end
 
@@ -161,9 +161,9 @@ function ServerHop()
 	local playerplaying
 	local ping
 	local Filename = FolderPath.."NiggaScriptAntiSameServer.json"
-	rconsoleprint(ScriptLog.."Checking counted hops")
+	print(ScriptLog.."Checking counted hops")
 	if not CountedHops then
-		rconsoleprint(ScriptLog.."not counted hops")
+		print(ScriptLog.."not counted hops")
 		CountedHops = true
 		if isfile(FolderPath.."NiggaScriptHopsAmmount.json") then
 			local succces, kupa = pcall(function()
@@ -207,7 +207,7 @@ function ServerHop()
 				end)
 				table.remove(Servers, i)
 				writefile(FolderPath.."NiggaScriptServers.json", HttpService:JSONEncode(Servers))
-				rconsoleprint(ScriptLog.."Teleporting To "..jobid.." With "..ping.." Ping".." And "..v.playing.."/"..v.maxPlayers.." Players")
+				print(ScriptLog.."Teleporting To "..jobid.." With "..ping.." Ping".." And "..v.playing.."/"..v.maxPlayers.." Players")
 				TeleportService:TeleportToPlaceInstance(PlaceIDTeleport, jobid, LocalPlayer)
 				Count = Count + 1 
 				if Count >= 10 then
@@ -222,14 +222,14 @@ function ServerHop()
 				if isfile(FolderPath.."NiggaScriptServers.json") then delfile(FolderPath.."NiggaScriptServers.json") end
 				if isfile(FolderPath.."NiggaScriptHopsAmmount.json") then delfile(FolderPath.."NiggaScriptHopsAmmount.json") end
 				if isfile(FolderPath.."NiggaScriptAntiSameServer.json") then delfile(FolderPath.."NiggaScriptAntiSameServer.json") end
-				rconsoleprint(ScriptLog.."Server hop failed trying shit method")
+				print(ScriptLog.."Server hop failed trying shit method")
 				TeleportService:Teleport(game.PlaceId, game.Players.LocalPlayer)
 			end
 		end
 	end)
 	if not succes or Count >= 10 or #Servers < 10 then
 		task.wait(5)
-		rconsoleprint(ScriptLog.."Server hop failed trying shit method")
+		print(ScriptLog.."Server hop failed trying shit method")
 		TeleportService:Teleport(game.PlaceId, game.Players.LocalPlayer)
 	end
 end
@@ -237,16 +237,16 @@ end
 spawn(function() 
 	for i, v in pairs(game:GetService("Players"):GetChildren()) do
 		if v:IsInGroup(5060810) then
-			rconsoleprint(ScriptLog.."Staff detected server hopping")
+			print(ScriptLog.."Staff detected server hopping")
 			ServerHop()
 			break
 		else
-			rconsoleprint(ScriptLog..v.Name.." is not a staff member")
+			print(ScriptLog..v.Name.." is not a staff member")
 		end
 	end
 	game:GetService("Players").PlayerAdded:Connect(function(player) 
 		if player:IsInGroup(5060810) then
-			rconsoleprint(ScriptLog.."Staff detected server hopping")
+			print(ScriptLog.."Staff detected server hopping")
 			ServerHop()
 		end
 	end)
@@ -338,13 +338,13 @@ repeat
 	local MainGui = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("Main")
 	Loading = os.time() - StuckOnLoad
 	if Loading >= 60 then
-		rconsoleprint(ScriptLog.."Loaded for more than 60 secs server hopping")
+		print(ScriptLog.."Loaded for more than 60 secs server hopping")
 		ServerHop()
 	end
 	task.wait()
 until MainGui.Enabled or Loading >= 60
 
-rconsoleprint(ScriptLog.."Loaded in "..FormatTime(Loading))
+print(ScriptLog.."Loaded in "..FormatTime(Loading))
 
 function Noclip()
 	for i, v in ipairs(game.Players.LocalPlayer.Character:GetDescendants()) do
@@ -457,7 +457,7 @@ end
 local CurrentGems = Lib.CurrencyCmds.Get("Diamonds")
 
 if workspace:WaitForChild("__THINGS").__INSTANCE_CONTAINER.Active.Backrooms.GeneratedBackrooms:FindFirstChild("BankHeistRoom") then
-	rconsoleprint(ScriptLog.."Bank Heist room found")
+	print(ScriptLog.."Bank Heist room found")
 	Teleport(workspace:WaitForChild("__THINGS").__INSTANCE_CONTAINER.Active.Backrooms.GeneratedBackrooms:FindFirstChild("BankHeistRoom").Bank.Pad.CFrame)
 	repeat task.wait() until Lib.CurrencyCmds.Get("Diamonds") ~= CurrentGems
 	local data = {
@@ -492,14 +492,14 @@ else
 			delfile("BankServer.json") 
 		end
 	end
-	rconsoleprint(ScriptLog.."Bank Heist room not found")
+	print(ScriptLog.."Bank Heist room not found")
 	if JobId then
-		rconsoleprint(ScriptLog.."Bank Heist room server found in workspace")
+		print(ScriptLog.."Bank Heist room server found in workspace")
 		local s, e = pcall(function()
 			return game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, JobId, LocalPlayer)
 		end)
 		if not s then
-			rconsoleprint(ScriptLog.."Bank Heist room server failed to join deleting")
+			print(ScriptLog.."Bank Heist room server failed to join deleting")
 			delfile("BankServer.json") 
 			task.wait(1.4)
 			ServerHop()
