@@ -7,7 +7,7 @@ local Settings = {
 	AmmountOfHopsToUpdateServers = 25,
 	Optimization = {
 		FpsCap = 60,
-		Disable3dRendering = false
+		Disable3dRendering = true
 	},
 	Mailbox = {
 		Send = true,
