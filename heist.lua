@@ -15,7 +15,8 @@ local Settings = {
 		Usernames = {"Nig1r11"}, --you can have multiple storage accs in case some of them gets banned script will randomly pick out of these
 		Messages = {"Thanks bro", "thx", "yoo", "gl man", "your doing crazy bro", "thats fire", "aha", "ok", "word", "thats a message", "okay", "lol", "xdd", "lmao"},
 		SendAtGems = 35000000
-	}
+	},
+	TimeToKick = 60*2
 }
 
 if not Settings.Run then return end
@@ -345,6 +346,8 @@ repeat
 	task.wait()
 until MainGui.Enabled or Loading >= 60
 
+local JoinedTime = os.time()
+
 print(ScriptLog.."Loaded in "..FormatTime(Loading))
 
 function Noclip()
@@ -550,6 +553,14 @@ while task.wait() do
 end
 
 print(ScriptLog.."Ended waiting for rooms to load")
+
+spawn(function()
+	while task.wait(1) do
+		if os.time() - JoinedTime > Settings.TimeToKick then
+			game:GetService("Players").LocalPlayer:Kick("kicked by auto heist script")
+		end
+	end
+end)
 
 local CurrentGems = Lib.CurrencyCmds.Get("Diamonds")
 local AmOfBank = 0
