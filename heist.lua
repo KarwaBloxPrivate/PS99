@@ -448,23 +448,39 @@ while task.wait() do
 	if TblSize ~= LastCheckSize then
 		LastCheck = os.time()
 		LastCheckSize = #workspace:WaitForChild("__THINGS").__INSTANCE_CONTAINER.Active.Backrooms.GeneratedBackrooms:GetChildren()
+		print(LastCheckSize)
 	end
-	if os.time() - LastCheck > 1 or workspace:WaitForChild("__THINGS").__INSTANCE_CONTAINER.Active.Backrooms.GeneratedBackrooms:FindFirstChild("BankHeistRoom") then
+	if os.time() - LastCheck > 2 and TblSize > 0 then
 		break
 	end
 end
 
+print(ScriptLog.."Ended waiting for rooms to load")
+
 local CurrentGems = Lib.CurrencyCmds.Get("Diamonds")
+local AmOfBank = 0
 
 if workspace:WaitForChild("__THINGS").__INSTANCE_CONTAINER.Active.Backrooms.GeneratedBackrooms:FindFirstChild("BankHeistRoom") then
 	print(ScriptLog.."Bank Heist room found")
-	Teleport(workspace:WaitForChild("__THINGS").__INSTANCE_CONTAINER.Active.Backrooms.GeneratedBackrooms:FindFirstChild("BankHeistRoom").Bank.Pad.CFrame)
+	for i, v in pairs( workspace:WaitForChild("__THINGS").__INSTANCE_CONTAINER.Active.Backrooms.GeneratedBackrooms:GetChildren()) do
+		if v.Name == "BankHeistRoom" then
+			AmOfBank = AmOfBank + 1
+			Teleport(v.Bank.Pad.CFrame)
+			task.wait(1)
+		end
+	end
 	repeat task.wait() until Lib.CurrencyCmds.Get("Diamonds") ~= CurrentGems
+	local LastServerHop = 0
+	if isfile(FolderPath.."LastServerHop.json") then
+		LastServerHop = HttpService:JSONDecode(readfile(FolderPath.."LastServerHop.json"))
+	end
+	writefile(FolderPath.."LastServerHop.json", HttpService:JSONEncode(os.time()))
+	local ServerHopTime = FormatTime(os.time() - LastServerHop)
 	local data = {
 		content = nil,
 		embeds = { {
-			title = "Stole "..(tostring(Lib.CurrencyCmds.Get("Diamonds") - CurrentGems)).." Diamonds 💎",
-			description = "It took "..(FormatTime(os.time() - StartTimeJoin)).." to steal from bank\nIt took 60s to server hop and steal",
+			title = "Stole "..(tostring(Lib.CurrencyCmds.Get("Diamonds") - CurrentGems)).." Diamonds 💎 ("..tostring(AmOfBank)..") Banks",
+			description = "It took "..(FormatTime(os.time() - StartTimeJoin)).." to steal from bank\nIt took "..ServerHopTime.." to server hop and steal",
 			color = 5814783,
 			footer = {
 				text = game:GetService("Players").LocalPlayer.Name.." | "..BeatufyGems(Lib.CurrencyCmds.Get("Diamonds")).." | "..GetServerPing().."ms"
@@ -481,7 +497,7 @@ if workspace:WaitForChild("__THINGS").__INSTANCE_CONTAINER.Active.Backrooms.Gene
 		return game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId, LocalPlayer)
 	end)
 	if not s then
-		task.wait(1.4)
+		task.wait(5)
 		ServerHop()
 	end
 else
@@ -501,7 +517,7 @@ else
 		if not s then
 			print(ScriptLog.."Bank Heist room server failed to join deleting")
 			delfile("BankServer.json") 
-			task.wait(1.4)
+			task.wait(5)
 			ServerHop()
 		end
 	else
