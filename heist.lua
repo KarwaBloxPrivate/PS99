@@ -7,7 +7,8 @@ local Settings = {
 	AmmountOfHopsToUpdateServers = 25,
 	Optimization = {
 		FpsCap = 60,
-		Disable3dRendering = true
+		Disable3dRendering = true,
+		FpsBoost = true,
 	},
 	Mailbox = {
 		Send = true,
@@ -396,8 +397,101 @@ end)
 
 getgenv().noclip = true
 
+
 local Lib = require(game:GetService("ReplicatedStorage"):WaitForChild("Library").Client)
 local Lib_ = require(game:GetService("ReplicatedStorage"):WaitForChild("Library"))
+
+
+if Settings.Optimization.FpsBoost then
+	local x, y = pcall(function() 
+		for i, v in pairs(game.Workspace:GetChildren()) do
+			if v.Name ~= game:GetService("Players").LocalPlayer.Name and v.Name ~= "__THINGS" and v.Name ~= "Terrain" and v.Name ~= "Camera" then
+				v:Destroy()
+			end
+		end
+		for i, v in pairs(game.Workspace:WaitForChild("__THINGS"):GetChildren()) do
+			if v.Name == "Breakables" then
+				v:Destroy()
+			end
+		end
+		game:GetService("Players").LocalPlayer.PlayerScripts.Scripts.Game["Random Events"]["Random Event Manager"].Enabled = false
+		--Skidded
+		local decalsyeeted = true
+		local g = game
+		local w = g.Workspace
+		local l = g.Lighting
+		local t = w.Terrain
+		t.WaterWaveSize = 0
+		t.WaterWaveSpeed = 0
+		t.WaterReflectance = 0
+		t.WaterTransparency = 0
+		l.GlobalShadows = false
+		l.FogEnd = 9e9
+		l.Brightness = 0
+		settings().Rendering.QualityLevel = "Level01"
+		for i, v in pairs(g:GetDescendants()) do
+			if v:IsA("Part") or v:IsA("Union") or v:IsA("CornerWedgePart") or v:IsA("TrussPart") then
+				v.Material = "Plastic"
+				v.Reflectance = 0
+			elseif v:IsA("Decal") or v:IsA("Texture") and decalsyeeted then
+				v.Transparency = 1
+			elseif v:IsA("ParticleEmitter") or v:IsA("Trail") then
+				v.Lifetime = NumberRange.new(0)
+			elseif v:IsA("Explosion") then
+				v.BlastPressure = 1
+				v.BlastRadius = 1
+			elseif v:IsA("Fire") or v:IsA("SpotLight") or v:IsA("Smoke") or v:IsA("Sparkles") then
+				v.Enabled = false
+			elseif v:IsA("MeshPart") then
+				v.Material = "Plastic"
+				v.Reflectance = 0
+				v.TextureID = 10385902758728957
+			end
+		end
+		for i, e in pairs(l:GetChildren()) do
+			if e:IsA("BlurEffect") or e:IsA("SunRaysEffect") or e:IsA("ColorCorrectionEffect") or e:IsA("BloomEffect") or e:IsA("DepthOfFieldEffect") then
+				e.Enabled = false
+			end
+		end
+
+		function xTab(TABLE)
+			for i,v in pairs(TABLE) do
+				if type(v) == "function" then
+					TABLE[i] = function(...) return end
+				end
+				if type(v) == "table" then
+					xTab(v)
+				end
+			end
+		end
+		xTab(Lib.WorldFX)
+
+		for i,v in pairs(game:GetDescendants()) do
+			if v:IsA("MeshPart") then
+				v.MeshId = ""
+			end
+			if v:IsA("BasePart") or v:IsA("MeshPart") then
+				v.Transparency = 1
+			end
+			if v:IsA("Texture") or v:IsA("Decal") then
+				v.Texture = ""
+			end
+			if v:IsA("ParticleEmitter") then
+				v.Lifetime = NumberRange.new(0)
+				v.Transparency = NumberSequence.new({NumberSequenceKeypoint.new(0,0), NumberSequenceKeypoint.new(1,0)})
+				v.Enabled = false
+			end
+			if v:IsA("BillboardGui") or v:IsA("SurfaceGui") or v:IsA("Trail") or v:IsA("Beam") then
+				v.Enabled = false
+			end
+			if v:IsA("Highlight") then
+				v.OutlineTransparency = 1
+				v.FillTransparency = 1
+			end
+		end
+		--Skidded
+	end)
+end
 
 if game.PlaceId ~= 8737899170 then
 	Lib.Network.Invoke("World1Teleport")
