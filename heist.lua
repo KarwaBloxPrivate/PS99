@@ -217,7 +217,7 @@ function ServerHop()
 					if isfile(FolderPath.."NiggaScriptAntiSameServer.json") then delfile(FolderPath.."NiggaScriptAntiSameServer.json") end
 					break
 				end
-				task.wait(1.3)
+				task.wait(1.8)
 			end
 			if count == 0 then
 				if isfile(FolderPath.."NiggaScriptServers.json") then delfile(FolderPath.."NiggaScriptServers.json") end
