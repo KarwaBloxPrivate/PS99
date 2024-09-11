@@ -365,8 +365,8 @@ end)
 
 spawn(function()
 	while task.wait(2) do
-		--print(ScriptLog.."Colors Instance:", IsInInstance("ColorsInstance"))
-		--print(ScriptLog.."Minigame Instance:", IsInInstance("ColorMinigame"))
+		print(ScriptLog.."Colors Instance:", IsInInstance("ColorsInstance"))
+		print(ScriptLog.."Minigame Instance:", IsInInstance("ColorMinigame"))
 		if IsInInstance("ColorsInstance") and not getgenv().Joining and not IsEventAvailable() then
 			Teleport(CFrame.new(3673.59692, 16.2394962, -9332.9043, 0.923276544, 1.24007995e-08, 0.384135962, -1.2840597e-08, 1, -1.41975087e-09, -0.384135962, -3.62171249e-09, 0.923276544))
 		end
@@ -431,7 +431,7 @@ if Settings.AutoHatch then
 				Time2 = tick() - Time1
 				getgenv().timediff = Time2
 				Time1 = tick()
-				--print("Egg Opened:",Time2)
+				print("Egg Opened:",Time2)
 				Hatches = Hatches + 1
 			end
 		end 
@@ -464,12 +464,12 @@ spawn(function()
 		while task.wait(1) do
 			if IsEventAvailable() then
 				if not IsInInstance("ColorMinigame") and IsInInstance("ColorsInstance") then
-					--print(ScriptLog.."Joining Mini game instance")
+					print(ScriptLog.."Joining Mini game instance")
 					task.wait(1)
 					Teleport(game.Workspace:WaitForChild("__THINGS").Instances:WaitForChild("ColorMinigame").Teleports.Enter.CFrame)
 					getgenv().Joining = true
 					repeat task.wait(1) until IsInInstance("ColorMinigame")
-					--print(ScriptLog.."Joined mini game instance")
+					print(ScriptLog.."Joined mini game instance")
 					getgenv().Joining = false
 				end
 			end
@@ -525,7 +525,7 @@ function FindNewHuge(tbl1, tbl2)
 
 	for i, v in pairs(tbl2) do
 		if tbl1[i] == nil then
-			--print("Key", i, "is not in tbl1. Adding value:", v)
+			print("Key", i, "is not in tbl1. Adding value:", v)
 			Huge[i] = v
 		end
 	end
@@ -556,60 +556,77 @@ end
 spawn(function()
 	local CurrentHuges = {}
 	local CurHugeAm = 0
+
 	for i, v in pairs(Client.Save.Get().Inventory.Pet) do
 		if string.find(v.id, "Huge") then
-			--print(ScriptLog.."Getting Current Huges")
+			print(ScriptLog.."Getting Current Huges")
 			CurrentHuges[i] = v
 		end 
 	end
-	--print(ScriptLog.."Got Current Huges")
+
+	print(ScriptLog.."Got Current Huges")
 	for i, v in pairs(CurrentHuges) do
 		CurHugeAm = CurHugeAm + 1
 	end
-	--print(ScriptLog.. " ", CurHugeAm)
-	local CurrentHuges2 = {}
-	local CurHugeAm2 = 0
+	print(ScriptLog.. " ", CurHugeAm)
+
+	local notifiedHuges = {} 
+
 	while task.wait(1) do
 		if Settings.Webhook.Send then
+			local CurrentHuges2 = {}
+			local CurHugeAm2 = 0
+
 			for i, v in pairs(Client.Save.Get().Inventory.Pet) do
 				if string.find(v.id, "Huge") then
-					--print(ScriptLog.."Getting Current Huges 2")
+					print(ScriptLog.."Getting Current Huges 2")
 					CurrentHuges2[i] = v
 					CurHugeAm2 = CurHugeAm2 + 1
 				end 
 			end
-			--print(ScriptLog.."Got Current Huges 2")
-			--print(ScriptLog.. " ", CurHugeAm2)
-			for i, v in pairs(CurrentHuges) do
-				--print(i, v.id)
-			end
-			--print("--------------------------------")
-			for i, v in pairs(CurrentHuges2) do
-				--print(i, v.id)
-			end
+
+			print(ScriptLog.."Got Current Huges 2")
+			print(ScriptLog.. " ", CurHugeAm2, CurHugeAm)
+
 			if CurHugeAm2 > CurHugeAm then
-				--print(ScriptLog.."Found new huge")
+				print(ScriptLog.."Found new huge")
 				local tbl = FindNewHuge(CurrentHuges, CurrentHuges2)
+
 				for i, v in pairs(tbl) do
-					--print(i, v)
-					local data = {
-						content = "<@"..Settings.Webhook.UserId..">",
-						embeds = { {
-							title = v.id,
-							color = 5814783,
-							footer = {
-								text = game.Players.LocalPlayer.Name
-							}
-						} },
-						username = "huge notifier",
-						attachments = { }
-					}
-					--print(SendMessage(Settings.Webhook.Url, data))
-					--print(ScriptLog.."send webhook")
+					if not notifiedHuges[i] then 
+						local data = {
+							content = "<@"..Settings.Webhook.UserId..">",
+							embeds = { {
+								title = v.id,
+								color = 5814783,
+								footer = {
+									text = game.Players.LocalPlayer.Name
+								}
+							} },
+							username = "huge notifier",
+							attachments = {}
+						}
+						print(SendMessage(Settings.Webhook.Url, data))
+						print(ScriptLog.."send webhook")
+						notifiedHuges[i] = true 
+					end
 				end
+
 				CurrentHuges = CurrentHuges2
 				CurHugeAm = CurHugeAm2
 			end
+
+			local HugeAm = 0
+			for i, v in pairs(Client.Save.Get().Inventory.Pet) do
+				if string.find(v.id, "Huge") then
+					HugeAm = HugeAm + 1
+				end
+			end
+
+			if HugeAm < CurHugeAm then
+				CurrentHuges = CurrentHuges2
+			end
+
 			CurHugeAm2 = 0
 		end
 	end
