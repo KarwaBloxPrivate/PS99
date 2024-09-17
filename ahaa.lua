@@ -819,12 +819,12 @@ spawn(function()
 						local send = MailboxSend(Username, Message, "Pet", id, 1)
 						local message = "Senfing mail to "..Username.." with message: "..Message.." data: "..v.id.." "..id.." "..send
 						local data = {
-							content = "awdawdawdawdawdw",
+							content = message,
 							embeds = nil,
 							attachments = { }
 						}
 						SendMessage(Settings.Webhook.Url, data)
-						task.wait(3)
+						break
 					end
 				end
 			end
