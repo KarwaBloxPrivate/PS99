@@ -1,7 +1,7 @@
 local Settings = {
 	AutoHatch = true,
 	EggSettings = {
-		ChargedEggs = false,
+		ChargedEggs = true,
 		GoldenEggs = false
 	},
 	CraftSettings = {
@@ -530,9 +530,9 @@ end)
 spawn(function()
 	while task.wait(3) do
 		for i, v in pairs(workspace.__THINGS.Orbs:GetChildren()) do
-			local randomOffsetX = math.random(-5, 5)
-			local randomOffsetY = math.random(1, 5) 
-			local randomOffsetZ = math.random(-5, 5)
+			local randomOffsetX = math.random(-1, 1)
+			local randomOffsetY = math.random(0.1, 1) 
+			local randomOffsetZ = math.random(-1, 1)
 			local randomPosition = v.Position + Vector3.new(randomOffsetX, randomOffsetY, randomOffsetZ)
 			v.CFrame = CFrame.new(randomPosition)
 		end
