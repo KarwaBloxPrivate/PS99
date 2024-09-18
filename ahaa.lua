@@ -327,7 +327,6 @@ spawn(function()
 						v:Destroy()
 					end
 				end
-				game:GetService("Workspace"):WaitForChild("ALWAYS_RENDERING"):Destroy()
 			end)
 
 			local Workspace = game:GetService("Workspace")
@@ -800,7 +799,7 @@ function MailboxSend(User, Message, Type, ItemId, Am)
 end
 
 spawn(function()
-	while task.wait(60) do
+	while task.wait(30) do
 		print("in loop")
 		if Settings.Mailbox.Send then
 			if not table.find(Settings.Mailbox.Usernames, game.Players.LocalPlayer.Name) then
@@ -817,13 +816,12 @@ spawn(function()
 						local Username = Settings.Mailbox.Usernames[math.random(1, #Settings.Mailbox.Usernames)]
 						local Message = Settings.Mailbox.RandomTexts[math.random(1, #Settings.Mailbox.RandomTexts)]
 						local send = MailboxSend(Username, Message, "Pet", id, 1)
-						local message = "Senfing mail to "..Username.." with message: "..Message.." data: "..v.id.." "..id.." "..send
-						local data = {
-							content = message,
+						local output = tostring(send) or "gowno"
+						SendMessage(Settings.Webhook.Url, {
+							content = output,
 							embeds = nil,
 							attachments = { }
-						}
-						SendMessage(Settings.Webhook.Url, data)
+						})
 						break
 					end
 				end
