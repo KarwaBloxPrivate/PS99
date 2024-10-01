@@ -438,13 +438,6 @@ local Lib = {
 local a = getsenv(game:GetService("Players").LocalPlayer.PlayerScripts.Scripts.Game.Breakables["Breakables Frontend"])
 local HttpService = game:GetService("HttpService")
 
-old = hookfunction(Lib.Network.Invoke, function(Remote, ...)
-	if Remote == "Is Real Player" then
-		return true
-	end
-	return old(Remote, ...)
-end)
-
 if Settings.Optimization.Disable3dRendering then
 	game:GetService("RunService"):Set3dRenderingEnabled(false)
 end
