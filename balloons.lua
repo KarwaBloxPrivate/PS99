@@ -793,7 +793,7 @@ local StartAmountOfItems = GetAmountOfAllItems() or 0
 
 while task.wait(0.1) do
 	UpdateBalloons()
-	if (Settings.PreventShittyGifts.bool and GetAmountOfPoppableBalloons() >= Balloons or GetAmountOfPoppableBalloons() == 30) or not Settings.PreventShittyGifts.bool then
+	if (Settings.PreventShittyGifts.bool and GetAmountOfPoppableBalloons() >= Balloons or GetAmountOfPoppableBalloons() == 30) or (not Settings.PreventShittyGifts.bool) then
 		print(ScriptLog.."Can pop balloons")
 		break
 	end
