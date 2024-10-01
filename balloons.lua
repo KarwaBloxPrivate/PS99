@@ -1,7 +1,7 @@
 local Settings = {
 	Run = true,
 	PreventShittyGifts = {
-		bool = false,
+		bool = true,
 		IgnoreGiftBags = true
 	},
 	Webhook = {
@@ -636,7 +636,7 @@ function isEquipped()
 end
 
 spawn(function()
-	while task.wait(0.1) do
+	while task.wait(0.01) do
 		if not isEquipped() then	
 			Lib.Network.Invoke("Slingshot_Toggle")
 		end
@@ -652,7 +652,7 @@ function PopBalloon(BalloonId)
 		if IsBalloonPopped(BalloonId) then
 			break
 		end
-		task.wait()
+		task.wait(0.1)
 	end
 end
 
