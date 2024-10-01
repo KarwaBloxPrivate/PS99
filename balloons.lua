@@ -635,6 +635,14 @@ function isEquipped()
 	return false
 end
 
+spawn(function()
+	while task.wait(0.1) do
+		if not isEquipped() then	
+			Lib.Network.Invoke("Slingshot_Toggle")
+		end
+	end
+end)
+
 function PopBalloon(BalloonId)
 	while true do
 		spawn(function()
