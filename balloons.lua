@@ -50,7 +50,7 @@ local PlaceID = game.PlaceId
 local HttpService = game:GetService("HttpService")
 getgenv().GettingServers = false
 
-if isfile(FolderPath.."NiggaScriptHopsAmmount.json") and HttpService:JSONDecode(readfile(FolderPath.."NiggaScriptHopsAmmount.json")) > Settings.AmmountOfHopsToUpdateServers or not isfile(FolderPath.."NiggaScriptHopsAmmount.json") then
+if isfile(FolderPath.."NiggaScriptHopsAmmount.json") and HttpService:JSONDecode(readfile(FolderPath.."NiggaScriptHopsAmmount.json")) > Settings.AmmountOfHopsToUpdateServers or not isfile(FolderPath.."NiggaScriptHopsAmmount.json") or not isfile(FolderPath.."NiggaScriptServers.json") then
 	print(ScriptLog.."Getting servers from Roblox API (Page "..maxPages..")")
 	local RestartedSV = pcall(function()
 		if isfile(FolderPath.."NiggaScriptAntiSameServer.json") then
