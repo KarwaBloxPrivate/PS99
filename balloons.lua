@@ -42,7 +42,7 @@ local FolderPath = "KarwaBalloon/"
 local TeleportService = game:GetService("TeleportService")
 local Servers = {}
 local RblxServerSite 
-local maxPages = 6
+local maxPages = 4
 local currentPage = 1
 local nextPageCursor = ""
 local PlaceIDTeleport = game.PlaceId
