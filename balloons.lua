@@ -1,7 +1,7 @@
 local Settings = {
-	Run = true,
+	Run = false,
 	PreventShittyGifts = {
-		bool = false,
+		bool = true,
 		IgnoreGiftBags = true
 	},
 	Webhook = {
@@ -427,8 +427,14 @@ if Settings.Optimization.FpsBoost then
 	end)
 end
 
-local Lib = require(game.ReplicatedStorage:WaitForChild("Library").Client)
 local Lib_ = require(game.ReplicatedStorage:WaitForChild("Library"))
+
+local Lib = {
+	Network = require(game.ReplicatedStorage:WaitForChild("Library").Client.Network),
+	CurrencyCmds = require(game.ReplicatedStorage:WaitForChild("Library").Client.CurrencyCmds),
+	Save = require(game.ReplicatedStorage:WaitForChild("Library").Client.Save),
+}
+
 local a = getsenv(game:GetService("Players").LocalPlayer.PlayerScripts.Scripts.Game.Breakables["Breakables Frontend"])
 local HttpService = game:GetService("HttpService")
 
