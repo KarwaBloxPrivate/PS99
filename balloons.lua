@@ -42,7 +42,7 @@ local FolderPath = "KarwaBalloon/"
 local TeleportService = game:GetService("TeleportService")
 local Servers = {}
 local RblxServerSite 
-local maxPages = 4
+local maxPages = 6
 local currentPage = 1
 local nextPageCursor = ""
 local PlaceIDTeleport = game.PlaceId
@@ -793,7 +793,7 @@ local StartAmountOfItems = GetAmountOfAllItems() or 0
 
 while task.wait(0.1) do
 	UpdateBalloons()
-	if GetAmountOfPoppableBalloons() >= Balloons or GetAmountOfPoppableBalloons() == 30 then
+	if (Settings.PreventShittyGifts.bool and GetAmountOfPoppableBalloons() >= Balloons or GetAmountOfPoppableBalloons() == 30) or not Settings.PreventShittyGifts.bool then
 		print(ScriptLog.."Can pop balloons")
 		break
 	end
