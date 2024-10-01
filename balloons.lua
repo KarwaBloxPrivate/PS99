@@ -653,7 +653,7 @@ end
 
 function GetAmountOfPoppableBalloons()
 	local Amount = 0
-	if Lib.Save.Get().w > 30 then
+	if Lib.Save.Get().BalloonGiftsDiminishingReturns > 30 then
 		Amount = 0
 	else
 		Amount = 30 - Lib.Save.Get().BalloonGiftsDiminishingReturns
