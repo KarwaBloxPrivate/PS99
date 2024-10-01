@@ -1,7 +1,7 @@
 local Settings = {
-	Run = false,
+	Run = true,
 	PreventShittyGifts = {
-		bool = true,
+		bool = false,
 		IgnoreGiftBags = true
 	},
 	Webhook = {
