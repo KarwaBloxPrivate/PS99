@@ -42,7 +42,7 @@ local FolderPath = "KarwaBalloon/"
 local TeleportService = game:GetService("TeleportService")
 local Servers = {}
 local RblxServerSite 
-local maxPages = 15
+local maxPages = 6
 local currentPage = 1
 local nextPageCursor = ""
 local PlaceIDTeleport = game.PlaceId
@@ -77,7 +77,7 @@ if isfile(FolderPath.."NiggaScriptHopsAmmount.json") and HttpService:JSONDecode(
 
 		RblxServerSite = result
 
-		if currentPage > 7 then
+		if currentPage > 1 then
 			if typeof(RblxServerSite.data) == "table" then
 				for i, v in pairs(RblxServerSite.data) do
 					table.insert(Servers, v)
