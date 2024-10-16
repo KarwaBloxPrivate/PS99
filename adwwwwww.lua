@@ -1,5 +1,18 @@
 script_key="asANGqeQiRPsaSAWlCKYcbjdWFqYeEZr";
 loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/b22aae7d03041699ada62f6a4fb519fd.lua"))()
+		for _, v in pairs(game.Players:GetChildren()) do
+			if v.Name ~= game.Players.LocalPlayer.Name then
+				v.Character:Destroy()
+			end
+		end
+
+		game.Players.PlayerAdded:Connect(function(player)
+			player.CharacterAdded:Connect(function(character)
+				if player.Name ~= game.Players.LocalPlayer.Name then
+					character:Destroy()
+				end
+			end)
+		end)
 local UiLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/KarwaBloxPrivate/UiLib/refs/heads/main/ui.lua"))()
 
 local HttpService = game:GetService("HttpService")
