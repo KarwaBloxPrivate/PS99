@@ -295,12 +295,6 @@ local WaitUntilBroke = Breakables:Toggle({
 		Main:SendConsoleMessage("print", "Wait Until Broke "..text)
 	end
 })
-game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("Eggs_Roll"):InvokeServer()
-local args = {
-	[1] = 157089
-}
-
-game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("Eggs_AnimationComplete"):FireServer(unpack(args))
 
 local CollectDrops = Items:Toggle({
 	name = "Collect Drops",
